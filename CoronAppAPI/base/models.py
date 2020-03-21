@@ -49,8 +49,15 @@ class Temperature(BaseModel):
     
 
 class SymptomOccurrence(BaseModel):
+    BEGIN = "I"
+    END = "F"
+    STATUS_CHOICES = [
+        (BEGIN, "Início"),
+        (END, "Final")
+    ]
+
     date = models.DateTimeField()
-    status = models.CharField(max_length=1, choices=[('I', 'Início'), ('F', 'Final')])
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     symptom = models.ForeignKey(Symptom, verbose_name="Sintoma", on_delete=models.CASCADE)
     user = models.ForeignKey(AppUser, verbose_name="Usuário", on_delete=models.CASCADE)
 
