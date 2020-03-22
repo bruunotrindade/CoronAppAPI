@@ -28,9 +28,15 @@ class AppUserSerializer(serializers.ModelSerializer):
     chars = CharacteristicSerializer(many=True, read_only=True)
     diseases = DiseaseSerializer(many=True, read_only=True)
     symptoms = SymptomSerializer(many=True, read_only=True)
-    setChars = serializers.PrimaryKeyRelatedField(source='chars', many=True, write_only=True, queryset=Characteristic.objects.all())
-    setDiseases = serializers.PrimaryKeyRelatedField(source='diseases', many=True, write_only=True, queryset=Disease.objects.all())
-    setSymptoms = serializers.PrimaryKeyRelatedField(source='symptoms', many=True, write_only=True, queryset=Symptom.objects.all())
+    setChars = serializers.PrimaryKeyRelatedField(
+        source='chars', many=True, write_only=True, queryset=Characteristic.objects.all(), required=True,
+    )
+    setDiseases = serializers.PrimaryKeyRelatedField(
+        source='diseases', many=True, write_only=True, queryset=Disease.objects.all(), required=True
+    )
+    setSymptoms = serializers.PrimaryKeyRelatedField(
+        source='symptoms', many=True, write_only=True, queryset=Symptom.objects.all(), required=True
+    )
 
     class Meta:
         model = AppUser
