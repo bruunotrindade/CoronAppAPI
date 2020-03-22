@@ -23,12 +23,12 @@ from base.api.viewsets import (
 
 
 router = routers.DefaultRouter()
-router.register(r'disease', DiseaseViewset, basename='DiseaseApp')
-router.register(r'appuser', AppUserViewset, basename='UserApp')
-router.register(r'characteristic', CharacteristicViewset, basename='CharacteristicApp')
-router.register(r'symptom', SymptomViewset, basename='SymptomApp')
-router.register(r'temperature', TemperatureViewset, basename='TemperatureApp')
-router.register(r'symptomoccurrence', SymptomOccurrenceViewset, basename='SymptomOccurrenceApp')
+router.register(r'diseases', DiseaseViewset, basename='DiseaseApp')
+router.register(r'appusers', AppUserViewset, basename='UserApp')
+router.register(r'characteristics', CharacteristicViewset, basename='CharacteristicApp')
+router.register(r'symptoms', SymptomViewset, basename='SymptomApp')
+router.register(r'temperatures', TemperatureViewset, basename='TemperatureApp')
+router.register(r'symptomoccurrences', SymptomOccurrenceViewset, basename='SymptomOccurrenceApp')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
