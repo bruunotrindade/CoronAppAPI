@@ -15,12 +15,18 @@ class Disease(BaseModel):
     class Meta:
         verbose_name = "Doença"
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Symptom(BaseModel):
     name = models.CharField(verbose_name="Nome", max_length=60)
 
     class Meta:
         verbose_name = "Sintoma"
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Characteristic(BaseModel):
@@ -29,6 +35,9 @@ class Characteristic(BaseModel):
 
     class Meta:
         verbose_name = "Característica"
+
+    def __str__(self):
+        return f'{self.name} Question: {self.question}'
 
 
 class AppUser(BaseModel):
@@ -43,6 +52,9 @@ class AppUser(BaseModel):
     class Meta:
         verbose_name = "Usuário"
 
+    def __str__(self):
+        return f'{self.email}'
+
 
 class Temperature(BaseModel):
     value = models.FloatField(verbose_name="Valor", max_length=60)
@@ -52,6 +64,9 @@ class Temperature(BaseModel):
     class Meta:
         verbose_name = "Medição de Temperatura"
         verbose_name_plural = "Medições de Temperatura"
+
+    def __str__(self):
+        return f'User: {self.user}'
     
 
 class SymptomOccurrence(BaseModel):
@@ -70,4 +85,7 @@ class SymptomOccurrence(BaseModel):
     class Meta:
         verbose_name = "Ocorrência de Sintoma"
         verbose_name_plural = "Ocorrências de Sintomas"
+
+    def __str__(self):
+        return f'User: {self.user}, Status: {self.get_status_display()}'
 

@@ -15,6 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
+
+from base.api.viewsets import (
+    AppUserViewset, CharacteristicViewset, DiseaseViewset, SymptomOccurrenceViewset, SymptomViewset, TemperatureViewset
+)
+
+
+router = routers.DefaultRouter()
+router.register(r'disease', DiseaseViewset, basename='DiseaseApp')
+router.register(r'appuser', AppUserViewset, basename='UserApp')
+router.register(r'characteristic', CharacteristicViewset, basename='CharacteristicApp')
+router.register(r'symptom', SymptomViewset, basename='SymptomApp')
+router.register(r'temperature', TemperatureViewset, basename='TemperatureApp')
+router.register(r'symptomoccurrence', SymptomOccurrenceViewset, basename='SymptomOccurrenceApp')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
