@@ -7,21 +7,21 @@ class DiseaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Disease
-        fields = ('name', )
+        fields = ('id', 'name', )
 
 
 class SymptomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Symptom
-        fields = ('name', )
+        fields = ('id', 'name',)
 
 
 class CharacteristicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Characteristic
-        fields = ('name', 'question')
+        fields = ('id', 'name', 'question')
 
 
 class AppUserSerializer(serializers.ModelSerializer):
@@ -31,7 +31,7 @@ class AppUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AppUser
-        fields = ('email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms')
+        fields = ('id', 'email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms')
 
 
 class TemperatureSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class TemperatureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Temperature
-        fields = ('value', 'date', 'user')
+        fields = ('id', 'value', 'date', 'user')
 
 
 class SymptomOccurrenceSerializer(serializers.ModelSerializer):
@@ -48,7 +48,7 @@ class SymptomOccurrenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SymptomOccurrence
-        fields = ('date', 'symptom', 'status', 'user')
+        fields = ('id', 'date', 'symptom', 'status', 'user')
 
 
 
