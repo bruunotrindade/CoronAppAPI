@@ -37,7 +37,7 @@ class Characteristic(BaseModel):
         verbose_name = "Característica"
 
     def __str__(self):
-        return f'{self.name} Question: {self.question}'
+        return f'Name: {self.name}, Question: {self.question}'
 
 
 class AppUser(BaseModel):
