@@ -1,11 +1,13 @@
 from django.db import models
 import uuid
 
+
 class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Meta:
         abstract = True
+
 
 class Disease(BaseModel):
     name = models.CharField(verbose_name="Nome", max_length=60)
@@ -13,11 +15,13 @@ class Disease(BaseModel):
     class Meta:
         verbose_name = "Doença"
 
+
 class Symptom(BaseModel):
     name = models.CharField(verbose_name="Nome", max_length=60)
 
     class Meta:
         verbose_name = "Sintoma"
+
 
 class Characteristic(BaseModel):
     name = models.CharField(verbose_name="Nome", max_length=60)
@@ -25,6 +29,7 @@ class Characteristic(BaseModel):
 
     class Meta:
         verbose_name = "Característica"
+
 
 class AppUser(BaseModel):
     email = models.EmailField()
@@ -37,6 +42,7 @@ class AppUser(BaseModel):
 
     class Meta:
         verbose_name = "Usuário"
+
 
 class Temperature(BaseModel):
     value = models.FloatField(verbose_name="Valor", max_length=60)
