@@ -25,13 +25,19 @@ class CharacteristicSerializer(serializers.ModelSerializer):
 
 
 class AppUserSerializer(serializers.ModelSerializer):
-    chars = CharacteristicSerializer(many=True)
-    diseases = DiseaseSerializer(many=True)
-    symptoms = SymptomSerializer(many=True)
+    chars = CharacteristicSerializer(many=True, read_only=True)
+    diseases = DiseaseSerializer(many=True, read_only=True)
+    symptoms = SymptomSerializer(many=True, read_only=True)
+    setChars = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Characteristic.objects.all())
+    setDiseases = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Disease.objects.all())
+    setSymptoms = serializers.PrimaryKeyRelatedField(many=True, write_only=True, queryset=Symptom.objects.all())
 
     class Meta:
         model = AppUser
-        fields = ('id', 'email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms')
+        fields = (
+            'id', 'email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms', 'setChars', 'setDiseases',
+            'setSymptoms'
+        )
 
 
 class TemperatureSerializer(serializers.ModelSerializer):
