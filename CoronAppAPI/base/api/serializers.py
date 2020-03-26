@@ -11,10 +11,11 @@ class DiseaseSerializer(serializers.ModelSerializer):
 
 
 class SymptomSerializer(serializers.ModelSerializer):
+    symptomType = serializers.CharField(source='get_type_symptom_display', read_only=True)
 
     class Meta:
         model = Symptom
-        fields = ('id', 'name',)
+        fields = ('id', 'name', 'symptomType')
 
 
 class CharacteristicSerializer(serializers.ModelSerializer):

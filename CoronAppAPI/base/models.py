@@ -20,7 +20,16 @@ class Disease(BaseModel):
 
 
 class Symptom(BaseModel):
+    UNCOMMON = 'U'
+    COMMON = 'C'
+
+    TYPE_SYMPTOMS = [
+        (UNCOMMON, 'Incomum'),
+        (COMMON, 'Comum'),
+    ]
+
     name = models.CharField(verbose_name="Nome", max_length=60)
+    type_symptom = models.CharField(verbose_name="Tipo de Sintoma", max_length=1)
 
     class Meta:
         verbose_name = "Sintoma"
