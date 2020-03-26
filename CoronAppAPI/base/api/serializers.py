@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
+from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence, UserSymptoms
 
 
 class DiseaseSerializer(serializers.ModelSerializer):
@@ -16,6 +16,13 @@ class SymptomSerializer(serializers.ModelSerializer):
         model = Symptom
         fields = ('id', 'name',)
 
+class UserSymptomSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='symptom.id')
+    nome = serializers.ReadOnlyField(source='symptom.name')
+
+    class Meta:
+        model = UserSymptoms
+        fields = ('id', 'nome', 'created_at')
 
 class CharacteristicSerializer(serializers.ModelSerializer):
 
@@ -27,7 +34,7 @@ class CharacteristicSerializer(serializers.ModelSerializer):
 class AppUserSerializer(serializers.ModelSerializer):
     chars = CharacteristicSerializer(many=True, read_only=True)
     diseases = DiseaseSerializer(many=True, read_only=True)
-    symptoms = SymptomSerializer(many=True, read_only=True)
+    symptoms = UserSymptomSerializer(source='usersymptoms_set', many=True)
     setChars = serializers.PrimaryKeyRelatedField(
         source='chars', many=True, write_only=True, queryset=Characteristic.objects.all(), required=True,
     )
@@ -44,7 +51,6 @@ class AppUserSerializer(serializers.ModelSerializer):
             'id', 'email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms', 'setChars', 'setDiseases',
             'setSymptoms'
         )
-
 
 class TemperatureSerializer(serializers.ModelSerializer):
     user = AppUserSerializer()

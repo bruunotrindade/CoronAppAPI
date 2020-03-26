@@ -3,14 +3,18 @@ from django import forms
 from django.utils import timezone
 from .models import *
 
+class UserSymptomInline(admin.TabularInline):
+    model = AppUser.symptoms.through
 
 @admin.register(AppUser)
 class AppUserAdmin(admin.ModelAdmin):
     fieldsets = (
             ('Informações', {'fields': ('email', 'dob')}),
             ('Localização', {'fields': ('state', 'city')}),
-            ('Geral', {'fields': ('chars', 'diseases', 'symptoms')}),
+            ('Geral', {'fields': ('chars', 'diseases')}),
         )
+
+    inlines = [UserSymptomInline,]
 
     list_display = ('email', 'dob', 'state', 'city')
     list_filter = ['state', 'city']
