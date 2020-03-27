@@ -1,11 +1,11 @@
 from rest_framework import response, status, viewsets, permissions
+from rest_framework.decorators import api_view
 
 from base.api.serializers import (
     DiseaseSerializer, SymptomSerializer, AppUserSerializer, CharacteristicSerializer, SymptomOccurrenceSerializer,
     TemperatureSerializer
 )
 from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
-
 
 class DiseaseViewset(viewsets.ModelViewSet):
     serializer_class = DiseaseSerializer
@@ -59,3 +59,14 @@ class SymptomOccurrenceViewset(viewsets.ModelViewSet):
     permission_classes = [
         permissions.AllowAny
     ]
+
+
+@api_view(['GET'])
+def all_datas(request):
+    data = {}
+
+    data['diseases'] = [disease for disease in Disease.objects.all()]
+    data['chars']    = [char for char in Characteristic.objects.all()]
+    data['symptoms'] = [symptom for symptom in Symptom.objects.all()]
+
+    return response.Response(data)
