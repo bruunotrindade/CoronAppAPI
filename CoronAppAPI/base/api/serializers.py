@@ -34,7 +34,7 @@ class CharacteristicSerializer(serializers.ModelSerializer):
 class AppUserSerializer(serializers.ModelSerializer):
     chars = CharacteristicSerializer(many=True, read_only=True)
     diseases = DiseaseSerializer(many=True, read_only=True)
-    symptoms = UserSymptomSerializer(source='usersymptoms_set', many=True)
+    symptoms = UserSymptomSerializer(source='usersymptoms_set', many=True, read_only=True)
     setChars = serializers.PrimaryKeyRelatedField(
         source='chars', many=True, write_only=True, queryset=Characteristic.objects.all(), required=True,
     )
