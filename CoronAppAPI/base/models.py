@@ -18,8 +18,18 @@ class Disease(BaseModel):
     def __str__(self):
         return f'{self.name}'
 
+
 class Symptom(BaseModel):
+    UNCOMMON = 'U'
+    COMMON = 'C'
+
+    TYPE_SYMPTOMS = [
+        (UNCOMMON, 'Incomum'),
+        (COMMON, 'Comum'),
+    ]
+
     name = models.CharField(verbose_name="Nome", max_length=60)
+    type_symptom = models.CharField(verbose_name="Tipo de Sintoma", max_length=1, choices=TYPE_SYMPTOMS)
 
     class Meta:
         verbose_name = "Sintoma"
@@ -54,6 +64,7 @@ class AppUser(BaseModel):
     def __str__(self):
         return f'{self.email}'
 
+
 class UserSymptoms(BaseModel):
     created_at = models.DateField(auto_now_add=True)
     user = models.ForeignKey(AppUser, verbose_name='Usuário', on_delete=models.CASCADE)
@@ -65,6 +76,7 @@ class UserSymptoms(BaseModel):
     
     def __str__(self):
         return f'User: {self.user}, Sintoma: {self.symptom}'
+
 
 class Temperature(BaseModel):
     value = models.FloatField(verbose_name="Valor", max_length=60)

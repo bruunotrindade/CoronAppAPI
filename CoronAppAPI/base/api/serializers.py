@@ -11,18 +11,22 @@ class DiseaseSerializer(serializers.ModelSerializer):
 
 
 class SymptomSerializer(serializers.ModelSerializer):
+    symptomType = serializers.CharField(source='get_type_symptom_display', read_only=True)
 
     class Meta:
         model = Symptom
-        fields = ('id', 'name',)
+        fields = ('id', 'name', 'symptomType')
+
 
 class UserSymptomSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='symptom.id')
-    nome = serializers.ReadOnlyField(source='symptom.name')
+    name = serializers.ReadOnlyField(source='symptom.name')
+    type = serializers.ReadOnlyField(source='symptom.get_type_symptom_display')
 
     class Meta:
         model = UserSymptoms
-        fields = ('id', 'nome', 'created_at')
+        fields = ('id', 'name', 'type', 'created_at')
+
 
 class CharacteristicSerializer(serializers.ModelSerializer):
 
@@ -51,6 +55,7 @@ class AppUserSerializer(serializers.ModelSerializer):
             'id', 'email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms', 'setChars', 'setDiseases',
             'setSymptoms'
         )
+
 
 class TemperatureSerializer(serializers.ModelSerializer):
     user = AppUserSerializer()
