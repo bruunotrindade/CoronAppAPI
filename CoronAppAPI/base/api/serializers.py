@@ -25,7 +25,7 @@ class UserSymptomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserSymptoms
-        fields = ('id', 'nome', 'type', 'created_at')
+        fields = ('id', 'name', 'type', 'created_at')
 
 
 class CharacteristicSerializer(serializers.ModelSerializer):

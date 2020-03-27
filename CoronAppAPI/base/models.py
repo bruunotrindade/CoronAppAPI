@@ -18,6 +18,7 @@ class Disease(BaseModel):
     def __str__(self):
         return f'{self.name}'
 
+
 class Symptom(BaseModel):
     UNCOMMON = 'U'
     COMMON = 'C'
@@ -28,7 +29,7 @@ class Symptom(BaseModel):
     ]
 
     name = models.CharField(verbose_name="Nome", max_length=60)
-    type_symptom = models.CharField(verbose_name="Tipo de Sintoma", max_length=1)
+    type_symptom = models.CharField(verbose_name="Tipo de Sintoma", max_length=1, choices=TYPE_SYMPTOMS)
 
     class Meta:
         verbose_name = "Sintoma"
