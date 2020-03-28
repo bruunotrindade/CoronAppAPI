@@ -69,10 +69,21 @@ class TemperatureAdmin(admin.ModelAdmin):
 class SymptomOccurrenceAdmin(admin.ModelAdmin):
     fieldsets = (
             ('Identificadores', {'fields': ('user', 'symptom')}),
-            ('Descritivos', {'fields': ('date', 'status')}),
+            ('Descritivos', {'fields': ('start_date', 'end_date')}),
         )
 
-    list_display = ('user', 'symptom', 'date', 'status')
+    list_display = ('user', 'symptom', 'start_date', 'end_date')
+    filter_horizontal = ()
+
+
+@admin.register(Recommendation)
+class RecommendationAdmin(admin.ModelAdmin):
+    fieldsets = (
+            ('Identificadores', {'fields': ('name', 'text')}),
+            ('Recomendar para ', {'fields': ('symptoms', 'diseases', 'characteristics')}),
+        )
+
+    list_display = ('name', 'text')
     filter_horizontal = ()
 
 

@@ -42,13 +42,13 @@ class SymptomOccurrenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SymptomOccurrence
-        fields = ('id', 'date', 'symptom', 'status')
+        fields = ('id', 'start_date', 'end_date', 'symptom')
 
 
 class AppUserSerializer(serializers.ModelSerializer):
     chars = CharacteristicSerializer(many=True, read_only=True)
     diseases = DiseaseSerializer(many=True, read_only=True)
-    symptoms = SymptomOccurrenceSerializer(source='usersymptoms_set', many=True)
+    symptoms = SymptomOccurrenceSerializer(source='symptomoccurrence_set', many=True)
     setChars = serializers.PrimaryKeyRelatedField(
         source='chars', many=True, write_only=True, queryset=Characteristic.objects.all(), required=True,
     )
@@ -76,13 +76,10 @@ class TemperatureSerializer(serializers.ModelSerializer):
 
 
 class RecommendationSerializer(serializers.ModelSerializer):
-    symptom = SymptomSerializer(source='symptoms', many=True, read_only=True)
-    disease = DiseaseSerializer(source='disesases', many=True, read_only=True)
-    char = CharacteristicSerializer(source='characteristics', many=True, read_only=True)
 
     class Meta:
         model = Recommendation
-        fields = ('id', 'name', 'texto', 'symptom', 'disease', 'char')
+        fields = ('id', 'name', 'text')
 
 
 

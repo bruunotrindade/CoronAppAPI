@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from django.utils import timezone
 
 
 class BaseModel(models.Model):
@@ -22,10 +23,11 @@ class Disease(BaseModel):
 class Symptom(BaseModel):
     UNCOMMON = 'U'
     COMMON = 'C'
-
+    CRITICAL = 'R'
     TYPE_SYMPTOMS = [
         (UNCOMMON, 'Incomum'),
         (COMMON, 'Comum'),
+        (CRITICAL, 'Crítico'),
     ]
 
     name = models.CharField(verbose_name="Nome", max_length=60)
@@ -54,8 +56,8 @@ class AppUser(BaseModel):
     dob = models.DateField(verbose_name="Data de nascimento")
     state = models.CharField(verbose_name="Estado", max_length=16)
     city = models.CharField(verbose_name="Cidade", max_length=40)
-    chars = models.ManyToManyField(Characteristic, verbose_name="Características")
-    diseases = models.ManyToManyField(Disease, verbose_name="Doenças")
+    chars = models.ManyToManyField(Characteristic, verbose_name="Características", related_name='userapp_set')
+    diseases = models.ManyToManyField(Disease, verbose_name="Doenças", related_name='userapp_set')
     symptoms = models.ManyToManyField(Symptom, verbose_name="Sintomas", through='SymptomOccurrence')
 
     class Meta:
@@ -63,6 +65,13 @@ class AppUser(BaseModel):
 
     def __str__(self):
         return f'{self.email}'
+
+    def yearsOld(self):
+        now = timezone.now().date()
+        years = abs(self.dob.year - now.year)
+        if self.dob.month > now.month:
+            years -= 1
+        return years
 
 
 # class UserSymptoms(BaseModel):
@@ -106,13 +115,16 @@ class SymptomOccurrence(BaseModel):
 
 
 class Recommendation(BaseModel):
+    COMMON = 'C'
+    CRITICAL = 'R'
+    TYPE_SYMPTOMS = [
+        (COMMON, 'Comum'),
+        (CRITICAL, 'Crítico'),
+    ]
+
     name = models.CharField(verbose_name='Nome', max_length=150)
-    texto = models.TextField(verbose_name='Texto')
-    symptoms = models.ManyToManyField(Symptom, verbose_name='Sintomas', related_name='recommendations_set')
-    diseases = models.ManyToManyField(Disease, verbose_name='Doenças', related_name='recommendations_set')
-    characteristics = models.ManyToManyField(
-        Characteristic, verbose_name='Caracteristicas', related_name='recommendations_set'
-    )
+    text = models.TextField(verbose_name='Texto')
+    type_symptom = models.CharField(verbose_name="Tipo de Sintoma", max_length=1, choices=TYPE_SYMPTOMS)
 
     class Meta:
         verbose_name = 'Recomendação'
