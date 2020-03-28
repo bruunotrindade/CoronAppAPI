@@ -56,7 +56,7 @@ class AppUser(BaseModel):
     city = models.CharField(verbose_name="Cidade", max_length=40)
     chars = models.ManyToManyField(Characteristic, verbose_name="Características")
     diseases = models.ManyToManyField(Disease, verbose_name="Doenças")
-    symptoms = models.ManyToManyField(Symptom, verbose_name="Sintomas", through='UserSymptoms')
+    symptoms = models.ManyToManyField(Symptom, verbose_name="Sintomas", through='SymptomOccurrence')
 
     class Meta:
         verbose_name = "Usuário"
@@ -65,17 +65,17 @@ class AppUser(BaseModel):
         return f'{self.email}'
 
 
-class UserSymptoms(BaseModel):
-    created_at = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(AppUser, verbose_name='Usuário', on_delete=models.CASCADE)
-    symptom = models.ForeignKey(Symptom, verbose_name='Sintoma', on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = 'Sintoma do Usuário'
-        verbose_name_plural = 'Sintomas dos Usuários'
-    
-    def __str__(self):
-        return f'User: {self.user}, Sintoma: {self.symptom}'
+# class UserSymptoms(BaseModel):
+#     created_at = models.DateField(auto_now_add=True)
+#     user = models.ForeignKey(AppUser, verbose_name='Usuário', on_delete=models.CASCADE)
+#     symptom = models.ForeignKey(Symptom, verbose_name='Sintoma', on_delete=models.CASCADE)
+#
+#     class Meta:
+#         verbose_name = 'Sintoma do Usuário'
+#         verbose_name_plural = 'Sintomas dos Usuários'
+#
+#     def __str__(self):
+#         return f'User: {self.user}, Sintoma: {self.symptom}'
 
 
 class Temperature(BaseModel):
@@ -92,15 +92,8 @@ class Temperature(BaseModel):
     
 
 class SymptomOccurrence(BaseModel):
-    BEGIN = "I"
-    END = "F"
-    STATUS_CHOICES = [
-        (BEGIN, "Início"),
-        (END, "Final")
-    ]
-
-    date = models.DateTimeField()
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    start_date = models.DateTimeField(verbose_name='Data de Inicio do Sintoma')
+    end_date = models.DateTimeField(verbose_name='Data de Termino do Sintoma', null=True, blank=True)
     symptom = models.ForeignKey(Symptom, verbose_name="Sintoma", on_delete=models.CASCADE)
     user = models.ForeignKey(AppUser, verbose_name="Usuário", on_delete=models.CASCADE)
 
@@ -109,5 +102,26 @@ class SymptomOccurrence(BaseModel):
         verbose_name_plural = "Ocorrências de Sintomas"
 
     def __str__(self):
-        return f'User: {self.user}, Status: {self.get_status_display()}'
+        return f'User: {self.user}, Status: Inicio({self.start_date}), Fim({self.end_date if self.end_date else ""})'
+
+
+class Recommendation(BaseModel):
+    name = models.CharField(verbose_name='Nome', max_length=150)
+    texto = models.TextField(verbose_name='Texto')
+    symptoms = models.ManyToManyField(Symptom, verbose_name='Sintomas', related_name='recommendations_set')
+    diseases = models.ManyToManyField(Disease, verbose_name='Doenças', related_name='recommendations_set')
+    characteristics = models.ManyToManyField(
+        Characteristic, verbose_name='Caracteristicas', related_name='recommendations_set'
+    )
+
+    class Meta:
+        verbose_name = 'Recomendação'
+        verbose_name_plural = 'Recomendações'
+
+    def __str__(self):
+        return f'{self.name}'
+
+
+
+
 

@@ -2,9 +2,9 @@ from rest_framework import response, status, viewsets, permissions
 
 from base.api.serializers import (
     DiseaseSerializer, SymptomSerializer, AppUserSerializer, CharacteristicSerializer, SymptomOccurrenceSerializer,
-    TemperatureSerializer
+    TemperatureSerializer, RecommendationSerializer
 )
-from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
+from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence, Recommendation
 
 
 class DiseaseViewset(viewsets.ModelViewSet):
@@ -59,3 +59,20 @@ class SymptomOccurrenceViewset(viewsets.ModelViewSet):
     permission_classes = [
         permissions.AllowAny
     ]
+
+
+class RecommendationViewset(viewsets.GenericViewSet):
+    serializer_class = RecommendationSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        occurrences_actives = SymptomOccurrence.objects.filter(user=self.kwargs['pk'], end_date__isnull=True)
+        recommendations = Recommendation.objects.filter()
+
+        # occurrences_user = SymptomOccurrence.objects.filter(user=self.kwargs['pk'])
+        # for occurrence in occurrences_user:
+        #     if occurrence.status == SymptomOccurrence.BEGIN and \
+        #             not occurrences_user.filter(symptom=occurrence.symptom, status=SymptomOccurrence.END):
+        #         occurrences_actives.append(occurrence)
+
+        q1 = Recommendation.objects.filter()
