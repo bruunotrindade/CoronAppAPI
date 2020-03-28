@@ -38,17 +38,19 @@ class CharacteristicSerializer(serializers.ModelSerializer):
 
 
 class SymptomOccurrenceSerializer(serializers.ModelSerializer):
-    symptom = SymptomSerializer()
+    id   = serializers.ReadOnlyField(source='symptom.id')
+    name = serializers.ReadOnlyField(source='symptom.name')
+    type = serializers.ReadOnlyField(source='symptom.get_type_symptom_display')
 
     class Meta:
         model = SymptomOccurrence
-        fields = ('id', 'date', 'symptom', 'status')
+        fields = ('id', 'name', 'type', 'start_date', 'end_date')
 
 
 class AppUserSerializer(serializers.ModelSerializer):
     chars = CharacteristicSerializer(many=True, read_only=True)
     diseases = DiseaseSerializer(many=True, read_only=True)
-    symptoms = SymptomOccurrenceSerializer(source='usersymptoms_set', many=True)
+    symptoms = SymptomOccurrenceSerializer(source='symptomoccurrence_set', many=True)
     setChars = serializers.PrimaryKeyRelatedField(
         source='chars', many=True, write_only=True, queryset=Characteristic.objects.all(), required=True,
     )

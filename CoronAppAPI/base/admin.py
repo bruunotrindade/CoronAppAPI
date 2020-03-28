@@ -4,7 +4,7 @@ from django.utils import timezone
 from .models import *
 
 
-class UserSymptomInline(admin.TabularInline):
+class SymptomOccurrenceInline(admin.TabularInline):
     model = AppUser.symptoms.through
 
 
@@ -16,7 +16,7 @@ class AppUserAdmin(admin.ModelAdmin):
             ('Geral', {'fields': ('chars', 'diseases')}),
         )
 
-    inlines = [UserSymptomInline, ]
+    inlines = [SymptomOccurrenceInline, ]
 
     list_display = ('email', 'dob', 'state', 'city')
     list_filter = ['state', 'city']
@@ -69,10 +69,21 @@ class TemperatureAdmin(admin.ModelAdmin):
 class SymptomOccurrenceAdmin(admin.ModelAdmin):
     fieldsets = (
             ('Identificadores', {'fields': ('user', 'symptom')}),
-            ('Descritivos', {'fields': ('date', 'status')}),
+            ('Descritivos', {'fields': ('start_date', 'end_date')}),
         )
 
-    list_display = ('user', 'symptom', 'date', 'status')
+    list_display = ('user', 'symptom', 'start_date', 'end_date')
+    filter_horizontal = ()
+
+
+@admin.register(Recommendation)
+class CharacteristicAdmin(admin.ModelAdmin):
+    fieldsets = (
+            ('Descrição', {'fields': ('name', 'texto', 'symptoms',
+            'diseases', 'characteristics')}),
+        )
+
+    list_display = ('name', 'texto')
     filter_horizontal = ()
 
 
