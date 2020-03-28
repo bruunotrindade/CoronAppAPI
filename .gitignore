@@ -135,3 +135,6 @@ dmypy.json
 */migrations/*
 /migrations/*
 */migrations/
+
+CoronAppAPI/base/migrations/
+
