@@ -7,6 +7,8 @@ from base.api.serializers import (
 )
 from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
 
+import json
+
 class DiseaseViewset(viewsets.ModelViewSet):
     serializer_class = DiseaseSerializer
     queryset = Disease.objects.all()
@@ -65,8 +67,8 @@ class SymptomOccurrenceViewset(viewsets.ModelViewSet):
 def all_datas(request):
     data = {}
 
-    data['diseases'] = [disease for disease in Disease.objects.all()]
-    data['chars']    = [char for char in Characteristic.objects.all()]
-    data['symptoms'] = [symptom for symptom in Symptom.objects.all()]
+    data['diseases'] = [{'id': disease.id, 'name': disease.name} for disease in Disease.objects.all()]
+    data['symptoms'] = [{'id': symptom.id, 'name': symptom.name, 'type_symptom': symptom.type_symptom} for symptom in Symptom.objects.all()]
+    data['chars']    = [{'id': char.id, 'name': char.name} for char in Characteristic.objects.all()]
 
     return response.Response(data)
