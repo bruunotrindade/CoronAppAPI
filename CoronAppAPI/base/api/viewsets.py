@@ -4,9 +4,9 @@ from django.db.models import Count, Q, Sum, F
 
 from base.api.serializers import (
     DiseaseSerializer, SymptomSerializer, AppUserSerializer, CharacteristicSerializer, SymptomOccurrenceSerializer,
-    TemperatureSerializer, RecommendationSerializer
+    TemperatureSerializer
 )
-from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence, Recommendation
+from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
 
 
 class DiseaseViewset(viewsets.ModelViewSet):

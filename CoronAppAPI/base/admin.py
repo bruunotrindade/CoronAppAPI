@@ -76,17 +76,6 @@ class SymptomOccurrenceAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
-@admin.register(Recommendation)
-class RecommendationAdmin(admin.ModelAdmin):
-    fieldsets = (
-            ('Identificadores', {'fields': ('name', 'text')}),
-            ('Recomendar para ', {'fields': ('symptoms', 'diseases', 'characteristics')}),
-        )
-
-    list_display = ('name', 'text')
-    filter_horizontal = ()
-
-
 admin.site.site_header = "CoronApp"
 admin.site.index_title = "Gerenciamento"
 admin.site.site_title = admin.site.site_header + " - Painel"

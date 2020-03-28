@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from base.models import (
-    Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence, Recommendation
+    Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
 )
 
 
@@ -74,12 +74,6 @@ class TemperatureSerializer(serializers.ModelSerializer):
         model = Temperature
         fields = ('id', 'value', 'date', 'user')
 
-
-class RecommendationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Recommendation
-        fields = ('id', 'name', 'text')
 
 
 

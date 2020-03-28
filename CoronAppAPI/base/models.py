@@ -114,26 +114,5 @@ class SymptomOccurrence(BaseModel):
         return f'User: {self.user}, Status: Inicio({self.start_date}), Fim({self.end_date if self.end_date else ""})'
 
 
-class Recommendation(BaseModel):
-    COMMON = 'C'
-    CRITICAL = 'R'
-    TYPE_SYMPTOMS = [
-        (COMMON, 'Comum'),
-        (CRITICAL, 'Crítico'),
-    ]
-
-    name = models.CharField(verbose_name='Nome', max_length=150)
-    text = models.TextField(verbose_name='Texto')
-    type_symptom = models.CharField(verbose_name="Tipo de Sintoma", max_length=1, choices=TYPE_SYMPTOMS)
-
-    class Meta:
-        verbose_name = 'Recomendação'
-        verbose_name_plural = 'Recomendações'
-
-    def __str__(self):
-        return f'{self.name}'
-
-
-
 
 
