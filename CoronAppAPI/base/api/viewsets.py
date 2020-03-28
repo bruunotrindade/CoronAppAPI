@@ -1,4 +1,5 @@
 from rest_framework import response, status, viewsets, permissions
+from rest_framework.decorators import api_view
 
 from base.api.serializers import (
     DiseaseSerializer, SymptomSerializer, AppUserSerializer, CharacteristicSerializer, SymptomOccurrenceSerializer,
@@ -6,6 +7,7 @@ from base.api.serializers import (
 )
 from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence, Recommendation
 
+import json
 
 class DiseaseViewset(viewsets.ModelViewSet):
     serializer_class = DiseaseSerializer
@@ -76,3 +78,14 @@ class RecommendationViewset(viewsets.GenericViewSet):
         #         occurrences_actives.append(occurrence)
 
         q1 = Recommendation.objects.filter()
+
+
+@api_view(['GET'])
+def all_datas(request):
+    data = {}
+
+    data['diseases'] = [{'id': disease.id, 'name': disease.name} for disease in Disease.objects.all()]
+    data['symptoms'] = [{'id': symptom.id, 'name': symptom.name, 'type_symptom': symptom.type_symptom} for symptom in Symptom.objects.all()]
+    data['chars']    = [{'id': char.id, 'name': char.name} for char in Characteristic.objects.all()]
+
+    return response.Response(data)

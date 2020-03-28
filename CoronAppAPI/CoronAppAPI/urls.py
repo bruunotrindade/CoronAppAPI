@@ -18,7 +18,8 @@ from django.urls import path, include
 from rest_framework import routers
 
 from base.api.viewsets import (
-    AppUserViewset, CharacteristicViewset, DiseaseViewset, SymptomOccurrenceViewset, SymptomViewset, TemperatureViewset
+    AppUserViewset, CharacteristicViewset, DiseaseViewset, SymptomOccurrenceViewset, 
+    SymptomViewset, TemperatureViewset, all_datas
 )
 
 
@@ -32,5 +33,6 @@ router.register(r'symptomoccurrences', SymptomOccurrenceViewset, basename='Sympt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    path('api/all_datas/', all_datas)
 ]
