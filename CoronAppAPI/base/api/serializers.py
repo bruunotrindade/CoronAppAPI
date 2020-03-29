@@ -37,11 +37,19 @@ class CharacteristicSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'question')
 
 
+class SymptomOccurrenceListSerializer(serializers.ListSerializer):
+
+    def create(self, validated_data):
+        symptoms = [SymptomOccurrence(**item) for item in validated_data]
+        return SymptomOccurrence.objects.bulk_create(symptoms)
+
+
 class SymptomOccurrenceSerializer(serializers.ModelSerializer):
     symptom = SymptomSerializer()
 
     class Meta:
         model = SymptomOccurrence
+        list_serializer_class = SymptomOccurrenceListSerializer
         fields = ('id', 'start_date', 'end_date', 'symptom')
 
 

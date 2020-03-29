@@ -103,7 +103,7 @@ class Temperature(BaseModel):
 class SymptomOccurrence(BaseModel):
     start_date = models.DateTimeField(verbose_name='Data de Inicio do Sintoma')
     end_date = models.DateTimeField(verbose_name='Data de Termino do Sintoma', null=True, blank=True)
-    symptom = models.ForeignKey(Symptom, verbose_name="Sintoma", on_delete=models.CASCADE)
+    symptom = models.ForeignKey(Symptom, verbose_name="Sintoma", on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(AppUser, verbose_name="Usuário", on_delete=models.CASCADE)
 
     class Meta:
