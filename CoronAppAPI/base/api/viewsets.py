@@ -1,13 +1,14 @@
-from rest_framework import response, status, viewsets, permissions
+from rest_framework import response, status, viewsets, permissions, mixins
 from rest_framework.decorators import api_view
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from django.db.models import Count, Q, Sum, F
 
 from base.api.serializers import (
     DiseaseSerializer, SymptomSerializer, AppUserSerializer, CharacteristicSerializer, SymptomOccurrenceSerializer,
-    TemperatureSerializer, RecommendationSerializer
+    TemperatureSerializer
 )
-from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence, Recommendation
+from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
 from .utils import gerar_token
 
 class DiseaseViewset(viewsets.ModelViewSet):
@@ -64,11 +65,10 @@ class SymptomOccurrenceViewset(viewsets.ModelViewSet):
     ]
 
 
-class RecommendationViewset(viewsets.GenericViewSet):
-    serializer_class = RecommendationSerializer
+class RecommendationViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     permission_classes = [permissions.AllowAny]
 
-    def get_queryset(self):
+    '''def get_queryset(self):
         user = AppUser.objects.get(pk=self.kwargs['pk'])
         symptoms_user = SymptomOccurrence.objects.filter(user=user, end_date__isnull=True)
         diseases_user = user.diseases
@@ -103,18 +103,65 @@ class RecommendationViewset(viewsets.GenericViewSet):
         #             not occurrences_user.filter(symptom=occurrence.symptom, status=SymptomOccurrence.END):
         #         occurrences_actives.append(occurrence)
 
-        q1 = Recommendation.objects.filter()
+        q1 = Recommendation.objects.filter()'''
+        
+    def retrieve(self, request,  *args, **kwargs):
+        try:
+            app_user = AppUser.objects.get(id=self.kwargs['pk'])
+        except AppUser.DoesNotExist:
+            return response.Response('Usuario nao encontrado', status=status.HTTP_404_NOT_FOUND)
+
+        symptoms_actives = SymptomOccurrence.objects.filter(
+            user__id=self.kwargs['pk'], end_date__isnull=True
+        ).prefetch_related('symptom')
+        diseases_actives = Disease.objects.filter(userapp_set__id=self.kwargs['pk'])
+        characteristics_actives = Characteristic.objects.filter(userapp_set__id=self.kwargs['pk'])
+        common = critical = exterior = grupo_risco = contato_infectado = aglomeracao = False
+        recommendation = []
+        if diseases_actives or app_user.yearsOld() >= 60:
+            grupo_risco = True
+        if characteristics_actives:
+            for char in characteristics_actives:
+                if char.name.lower() in ['infectado']:
+                    contato_infectado = True
+                elif char.name.lower() in ['exterior']:
+                    exterior = True
+                elif char.name.lower() in ['aglomeracao']:
+                    aglomeracao = True
+
+        for occurrence in symptoms_actives:
+            if occurrence.symptom.type_symptom == Symptom.COMMON:
+                common = True
+            elif occurrence.symptom.type_symptom == Symptom.CRITICAL:
+                critical = True
+            else:
+                pass
+
+        if grupo_risco or contato_infectado or common or exterior or aglomeracao:
+            recommendation.append('isolamento')
+        if (common and critical) or \
+                (contato_infectado and grupo_risco) or \
+                (grupo_risco and critical) or \
+                (grupo_risco and critical and common):
+            recommendation.append('atendimento')
+
+        return response.Response({'recommendation': recommendation}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 def all_datas(request):
-    data = {}
+    data = {
+        'diseases': [{'id': disease.id, 'name': disease.name} for disease in Disease.objects.all()],
+        'symptoms': [
+            {
+                'id': symptom.id,
+                'name': symptom.name,
+                'type_symptom': symptom.type_symptom
+            } for symptom in Symptom.objects.all()
+        ],
+        'chars': [{'id': char.id, 'name': char.name, 'question': char.question} for char in Characteristic.objects.all()]}
 
-    data['diseases'] = [{'id': disease.id, 'name': disease.name} for disease in Disease.objects.all()]
-    data['symptoms'] = [{'id': symptom.id, 'name': symptom.name, 'type_symptom': symptom.type_symptom} for symptom in Symptom.objects.all()]
-    data['chars']    = [{'id': char.id, 'name': char.name} for char in Characteristic.objects.all()]
-
-    return response.Response(data)
+    return response.Response(data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def verify_email(request, email):

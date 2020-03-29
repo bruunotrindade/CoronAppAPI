@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from base.models import (
-    Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence, Recommendation
+    Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
 )
 
 
@@ -50,7 +50,7 @@ class SymptomOccurrenceSerializer(serializers.ModelSerializer):
 class AppUserSerializer(serializers.ModelSerializer):
     chars = CharacteristicSerializer(many=True, read_only=True)
     diseases = DiseaseSerializer(many=True, read_only=True)
-    symptoms = SymptomOccurrenceSerializer(source='symptomoccurrence_set', many=True)
+    symptoms = SymptomOccurrenceSerializer(source='symptomoccurrence_set', many=True, read_only=True)
     setChars = serializers.PrimaryKeyRelatedField(
         source='chars', many=True, write_only=True, queryset=Characteristic.objects.all(), required=True,
     )
@@ -76,15 +76,6 @@ class TemperatureSerializer(serializers.ModelSerializer):
         model = Temperature
         fields = ('id', 'value', 'date', 'user')
 
-
-class RecommendationSerializer(serializers.ModelSerializer):
-    symptom = SymptomSerializer(source='symptoms', many=True, read_only=True)
-    disease = DiseaseSerializer(source='disesases', many=True, read_only=True)
-    char = CharacteristicSerializer(source='characteristics', many=True, read_only=True)
-
-    class Meta:
-        model = Recommendation
-        fields = ('id', 'name', 'texto', 'symptom', 'disease', 'char')
 
 
 

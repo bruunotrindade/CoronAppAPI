@@ -19,7 +19,7 @@ from rest_framework import routers
 
 from base.api.viewsets import (
     AppUserViewset, CharacteristicViewset, DiseaseViewset, SymptomOccurrenceViewset, 
-    SymptomViewset, TemperatureViewset, all_datas, verify_email
+    SymptomViewset, RecommendationViewset, TemperatureViewset, all_datas, verify_email
 )
 
 
@@ -30,6 +30,7 @@ router.register(r'characteristics', CharacteristicViewset, basename='Characteris
 router.register(r'symptoms', SymptomViewset, basename='SymptomApp')
 router.register(r'temperatures', TemperatureViewset, basename='TemperatureApp')
 router.register(r'symptomoccurrences', SymptomOccurrenceViewset, basename='SymptomOccurrenceApp')
+router.register(r'recommendations', RecommendationViewset, basename='RecommendationApp')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
