@@ -6,10 +6,11 @@ from django.db.models import Count, Q, Sum, F
 
 from base.api.serializers import (
     DiseaseSerializer, SymptomSerializer, AppUserSerializer, CharacteristicSerializer, SymptomOccurrenceSerializer,
-    TemperatureSerializer
+    TemperatureSerializer, SymptomOccurrenceCreateSerializer
 )
 from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
 from .utils import gerar_token
+
 
 class DiseaseViewset(viewsets.ModelViewSet):
     serializer_class = DiseaseSerializer
@@ -63,6 +64,20 @@ class SymptomOccurrenceViewset(viewsets.ModelViewSet):
     permission_classes = [
         permissions.AllowAny
     ]
+
+
+class SymptomOccurrenceCreateViewset(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    serializer_class = SymptomOccurrenceCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        from django.utils import timezone
+        serializer = self.get_serializer(data=request.data)
+        user = serializer.fields['idUser'].queryset[0]
+        if SymptomOccurrence.objects.filter(user=user, start_date=timezone.now().date()).exists():
+            return response.Response('Já respondeu Hoje', status=status.HTTP_406_NOT_ACCEPTABLE)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return response.Response(status=status.HTTP_201_CREATED)
 
 
 class RecommendationViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -144,6 +159,8 @@ class RecommendationViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
                 (grupo_risco and critical) or \
                 (grupo_risco and critical and common):
             recommendation.append('atendimento')
+        if len(recommendation) == 0:
+            recommendation.append('fica em casa')
 
         return response.Response({'recommendation': recommendation}, status=status.HTTP_200_OK)
 
@@ -162,6 +179,7 @@ def all_datas(request):
         'chars': [{'id': char.id, 'name': char.name, 'question': char.question} for char in Characteristic.objects.all()]}
 
     return response.Response(data, status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 def verify_email(request, email):

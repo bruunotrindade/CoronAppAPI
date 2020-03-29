@@ -6,10 +6,9 @@ from base.models import (
 
 
 class DiseaseSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Disease
-        fields = ('id', 'name', )
+        fields = ('id', 'name',)
 
 
 class SymptomSerializer(serializers.ModelSerializer):
@@ -31,28 +30,53 @@ class SymptomSerializer(serializers.ModelSerializer):
 
 
 class CharacteristicSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Characteristic
         fields = ('id', 'name', 'question')
 
 
-class SymptomOccurrenceListSerializer(serializers.ListSerializer):
+class SymptomOccurrenceCreateSerializer(serializers.Serializer):
+    idUser = serializers.PrimaryKeyRelatedField(queryset=AppUser.objects.all())
+    symptoms = serializers.JSONField(required=True)
 
     def create(self, validated_data):
-        symptoms = [SymptomOccurrence(**item) for item in validated_data]
-        return SymptomOccurrence.objects.bulk_create(symptoms)
+        from django.utils import timezone
+        symptoms_data = validated_data.pop('symptoms')
+        user = validated_data.pop('idUser')
+
+        symptoms_actives = SymptomOccurrence.objects.filter(user=user, end_date__isnull=True)
+        new_actives = []
+        if len(symptoms_data) > 0:
+            for active in symptoms_actives:
+                if str(active.symptom_id) not in [symptom['id'] for symptom in symptoms_data]:
+                    active.end_date = timezone.now()
+                    active.save()
+                else:
+                    new_actives.append(active)
+
+        data = []
+        if len(symptoms_data) > 0:
+            for item in symptoms_data:
+                if item['id'] not in [str(occurrence.symptom_id) for occurrence in new_actives]:
+                    try:
+                        data.append(SymptomOccurrence(symptom_id=item['id'], user=user, start_date=item['start_date']))
+                    except KeyError:
+                        data.append(SymptomOccurrence(symptom_id=item['id'], user=user, start_date=timezone.now()))
+        else:
+            return SymptomOccurrence.objects.create(
+                user=user, symptom=None, start_date=timezone.now().date())
+
+        return SymptomOccurrence.objects.bulk_create(data)
 
 
 class SymptomOccurrenceSerializer(serializers.ModelSerializer):
-    id   = serializers.ReadOnlyField(source='symptom.id')
+    id = serializers.ReadOnlyField(source='symptom.id')
     name = serializers.ReadOnlyField(source='symptom.name')
     type = serializers.ReadOnlyField(source='symptom.get_type_symptom_display')
 
     class Meta:
         model = SymptomOccurrence
-        list_serializer_class = SymptomOccurrenceListSerializer
-        fields = ('id', 'start_date', 'end_date', 'symptom')
+        fields = ('id', 'start_date', 'end_date', 'symptom', 'type', 'name')
 
 
 class AppUserSerializer(serializers.ModelSerializer):
@@ -83,9 +107,3 @@ class TemperatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Temperature
         fields = ('id', 'value', 'date', 'user')
-
-
-
-
-
-

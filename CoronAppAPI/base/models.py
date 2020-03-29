@@ -101,8 +101,8 @@ class Temperature(BaseModel):
     
 
 class SymptomOccurrence(BaseModel):
-    start_date = models.DateTimeField(verbose_name='Data de Inicio do Sintoma')
-    end_date = models.DateTimeField(verbose_name='Data de Termino do Sintoma', null=True, blank=True)
+    start_date = models.DateField(verbose_name='Data de Inicio do Sintoma')
+    end_date = models.DateField(verbose_name='Data de Termino do Sintoma', null=True, blank=True)
     symptom = models.ForeignKey(Symptom, verbose_name="Sintoma", on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(AppUser, verbose_name="Usuário", on_delete=models.CASCADE)
 
@@ -111,7 +111,9 @@ class SymptomOccurrence(BaseModel):
         verbose_name_plural = "Ocorrências de Sintomas"
 
     def __str__(self):
-        return f'User: {self.user}, Status: Inicio({self.start_date}), Fim({self.end_date if self.end_date else ""})'
+        return f'User: {self.user}, ' \
+               f'Status: Inicio({self.start_date}), Fim({self.end_date if self.end_date else ""}) ' \
+               f'Sintoma: {self.symptom.name if self.symptom else ""}'
 
 
 

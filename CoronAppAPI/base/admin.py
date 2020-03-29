@@ -41,7 +41,7 @@ class SymptomAdmin(admin.ModelAdmin):
             ('Descrição', {'fields': ('name', 'type_symptom')}),
         )
 
-    list_display = ('name',)
+    list_display = ('name', 'type_symptom')
     filter_horizontal = ()
 
 
