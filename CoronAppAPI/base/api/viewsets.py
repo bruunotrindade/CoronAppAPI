@@ -1,5 +1,7 @@
 from rest_framework import response, status, viewsets, permissions, mixins
 from rest_framework.decorators import api_view
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
 from django.db.models import Count, Q, Sum, F
 
 from base.api.serializers import (
@@ -7,7 +9,7 @@ from base.api.serializers import (
     TemperatureSerializer
 )
 from base.models import Disease, Symptom, Characteristic, AppUser, Temperature, SymptomOccurrence
-
+from .utils import gerar_token
 
 class DiseaseViewset(viewsets.ModelViewSet):
     serializer_class = DiseaseSerializer
@@ -66,6 +68,43 @@ class SymptomOccurrenceViewset(viewsets.ModelViewSet):
 class RecommendationViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     permission_classes = [permissions.AllowAny]
 
+    '''def get_queryset(self):
+        user = AppUser.objects.get(pk=self.kwargs['pk'])
+        symptoms_user = SymptomOccurrence.objects.filter(user=user, end_date__isnull=True)
+        diseases_user = user.diseases
+        chars_user = user.chars
+
+        recommendations = Recommendation.objects.all()
+
+        # Filtra as recomendações com os mesmos sintomas
+        rec1 = [ rec for rec in recommendations 
+                  if all( sym in rec['symptoms'] 
+                  for sym in symptoms_user ) 
+        ]
+
+        # Filtra as recomendações com as mesmas doenças
+        rec2 = [ rec for rec in rec1 
+                  if all( dis in rec['diseases'] 
+                  for dis in diseases_user ) 
+        ]
+
+        # Filtra as recomendações com as mesmas caracteristicas
+        rec3 = [ rec for rec in rec2 
+                  if all( char in rec['characteristics'] 
+                  for char in chars_user ) 
+        ]
+
+        # Recomendações que sobraram
+        print(rec3)
+
+        # occurrences_user = SymptomOccurrence.objects.filter(user=self.kwargs['pk'])
+        # for occurrence in occurrences_user:
+        #     if occurrence.status == SymptomOccurrence.BEGIN and \
+        #             not occurrences_user.filter(symptom=occurrence.symptom, status=SymptomOccurrence.END):
+        #         occurrences_actives.append(occurrence)
+
+        q1 = Recommendation.objects.filter()'''
+        
     def retrieve(self, request,  *args, **kwargs):
         try:
             app_user = AppUser.objects.get(id=self.kwargs['pk'])
@@ -120,6 +159,19 @@ def all_datas(request):
                 'type_symptom': symptom.type_symptom
             } for symptom in Symptom.objects.all()
         ],
-        'chars': [{'id': char.id, 'name': char.name} for char in Characteristic.objects.all()]}
+        'chars': [{'id': char.id, 'name': char.name, 'question': char.question} for char in Characteristic.objects.all()]}
 
     return response.Response(data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def verify_email(request, email):
+    user = get_object_or_404(AppUser, email=email) 
+    data_user = AppUserSerializer(user)
+
+    token = gerar_token()
+
+    message = 'Bem Vindo ao CovidApp! \n Para validar o seu email, digite o código abaixo em seu aplicativo: \n Código: ' +  token + '\n' 
+    send_mail('CovidApp - Confirmação de Email', message, 'covidappbr@gmail.com', [email])
+
+    return response.Response({'User': data_user.data, 'Token': token}, status=status.HTTP_200_OK)
+

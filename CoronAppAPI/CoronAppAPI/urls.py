@@ -19,7 +19,7 @@ from rest_framework import routers
 
 from base.api.viewsets import (
     AppUserViewset, CharacteristicViewset, DiseaseViewset, SymptomOccurrenceViewset, 
-    SymptomViewset, TemperatureViewset, all_datas, RecommendationViewset
+    SymptomViewset, RecommendationViewset, TemperatureViewset, all_datas, verify_email
 )
 
 
@@ -36,6 +36,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/all_datas/', all_datas),
-    # path('api/recommendations/<int:pk>', RecommendationViewset.as_view({'get': 'detail'}))
-
+    path('api/email/<str:email>', verify_email)
 ]

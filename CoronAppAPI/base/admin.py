@@ -4,7 +4,7 @@ from django.utils import timezone
 from .models import *
 
 
-class UserSymptomInline(admin.TabularInline):
+class SymptomOccurrenceInline(admin.TabularInline):
     model = AppUser.symptoms.through
 
 
@@ -16,7 +16,7 @@ class AppUserAdmin(admin.ModelAdmin):
             ('Geral', {'fields': ('chars', 'diseases')}),
         )
 
-    inlines = [UserSymptomInline, ]
+    inlines = [SymptomOccurrenceInline, ]
 
     list_display = ('email', 'dob', 'state', 'city')
     list_filter = ['state', 'city']
