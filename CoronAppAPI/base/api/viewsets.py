@@ -48,6 +48,20 @@ class TemperatureViewset(viewsets.ModelViewSet):
     ]
 
 
+class LastTemperatureViewset(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+    serializer_class = TemperatureSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            app_user = AppUser.objects.get(id=self.kwargs['pk'])
+        except AppUser.DoesNotExist:
+            return response.Response('Usuario nao encontrado', status=status.HTTP_404_NOT_FOUND)
+
+        queryset = Temperature.objects.filter(user=app_user).last()
+        serializer = self.get_serializer(queryset)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class AppUserViewset(viewsets.ModelViewSet):
     serializer_class = AppUserSerializer
     queryset = AppUser.objects.all()
@@ -70,14 +84,14 @@ class SymptomOccurrenceCreateViewset(viewsets.GenericViewSet, mixins.CreateModel
     serializer_class = SymptomOccurrenceCreateSerializer
 
     def create(self, request, *args, **kwargs):
-        from django.utils import timezone
         serializer = self.get_serializer(data=request.data)
         user = serializer.fields['idUser'].queryset[0]
-        if SymptomOccurrence.objects.filter(user=user, start_date=timezone.now().date()).exists():
-            return response.Response('Já respondeu Hoje', status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return response.Response(status=status.HTTP_201_CREATED)
+
+        instance = SymptomOccurrence.objects.filter(user=user, end_date__isnull=True)
+        instance_serializer = SymptomOccurrenceSerializer(instance, many=True)
+        return response.Response(instance_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class RecommendationViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -145,12 +159,13 @@ class RecommendationViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
                     aglomeracao = True
 
         for occurrence in symptoms_actives:
-            if occurrence.symptom.type_symptom == Symptom.COMMON:
-                common = True
-            elif occurrence.symptom.type_symptom == Symptom.CRITICAL:
-                critical = True
-            else:
-                pass
+            if occurrence.symptom:
+                if occurrence.symptom.type_symptom == Symptom.COMMON:
+                    common = True
+                elif occurrence.symptom.type_symptom == Symptom.CRITICAL:
+                    critical = True
+                else:
+                    pass
 
         if grupo_risco or contato_infectado or common or exterior or aglomeracao:
             recommendation.append('isolamento')

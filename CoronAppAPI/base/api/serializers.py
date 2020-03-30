@@ -102,8 +102,23 @@ class AppUserSerializer(serializers.ModelSerializer):
 
 
 class TemperatureSerializer(serializers.ModelSerializer):
-    user = AppUserSerializer()
+    idUser = serializers.PrimaryKeyRelatedField(queryset=AppUser.objects.all(), write_only=True, source='user')
+    valueSet = serializers.FloatField(source='value', write_only=True)
+    dateSet = serializers.DateField(write_only=True, source='date', required=False)
+    value = serializers.ReadOnlyField()
+    date = serializers.ReadOnlyField()
 
     class Meta:
         model = Temperature
-        fields = ('id', 'value', 'date', 'user')
+        fields = ('id', 'value', 'date', 'idUser', 'valueSet', 'dateSet')
+
+    def create(self, validated_data):
+        from django.utils import timezone
+        try:
+            date = validated_data['date']
+            temp = Temperature.objects.create(**validated_data)
+        except KeyError:
+            temp = Temperature.objects.create(date=timezone.now().date(), **validated_data)
+        return temp
+
+

@@ -56,9 +56,9 @@ class AppUser(BaseModel):
     dob = models.DateField(verbose_name="Data de nascimento")
     state = models.CharField(verbose_name="Estado", max_length=16)
     city = models.CharField(verbose_name="Cidade", max_length=40)
-    chars = models.ManyToManyField(Characteristic, verbose_name="Características", related_name='userapp_set')
-    diseases = models.ManyToManyField(Disease, verbose_name="Doenças", related_name='userapp_set')
-    symptoms = models.ManyToManyField(Symptom, verbose_name="Sintomas", through='SymptomOccurrence')
+    chars = models.ManyToManyField(Characteristic, verbose_name="Características", related_name='userapp_set', blank=True)
+    diseases = models.ManyToManyField(Disease, verbose_name="Doenças", related_name='userapp_set', blank=True)
+    symptoms = models.ManyToManyField(Symptom, verbose_name="Sintomas", through='SymptomOccurrence', blank=True)
 
     class Meta:
         verbose_name = "Usuário"
@@ -89,7 +89,7 @@ class AppUser(BaseModel):
 
 class Temperature(BaseModel):
     value = models.FloatField(verbose_name="Valor", max_length=60)
-    date = models.DateTimeField(verbose_name="Data") 
+    date = models.DateField(verbose_name="Data")
     user = models.ForeignKey(AppUser, verbose_name="Usuário", on_delete=models.CASCADE)
 
     class Meta:
