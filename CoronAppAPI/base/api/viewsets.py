@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, Q, Sum, F
-from django.utils.timezone import timezone
+from django.utils import timezone
 
 from base.api.serializers import (
     DiseaseSerializer, SymptomSerializer, AppUserSerializer, CharacteristicSerializer, SymptomOccurrenceSerializer,
