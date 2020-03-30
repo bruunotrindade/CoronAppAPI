@@ -88,7 +88,6 @@ class SymptomOccurrenceCreateViewset(viewsets.GenericViewSet, mixins.CreateModel
         user = serializer.fields['idUser'].queryset[0]
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-
         instance = SymptomOccurrence.objects.filter(user=user, end_date__isnull=True)
         instance_serializer = SymptomOccurrenceSerializer(instance, many=True)
         return response.Response(instance_serializer.data, status=status.HTTP_201_CREATED)
