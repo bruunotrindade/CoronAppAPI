@@ -88,7 +88,7 @@ class SymptomOccurrenceCreateViewset(viewsets.GenericViewSet, mixins.CreateModel
         serializer = self.get_serializer(data=request.data)
         user = serializer.fields['idUser'].queryset[0]
 
-        if len(SymptomOccurrence.filter(user=user).filter(Q(start_date=timezone.now()) | Q(end_date=timezone.now()))) > 0:
+        if len(SymptomOccurrence.objects.filter(user=user).filter(Q(start_date=timezone.now()) | Q(end_date=timezone.now()))) > 0:
             return response.Response({'erro', 'Checklist não autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer.is_valid(raise_exception=True)
