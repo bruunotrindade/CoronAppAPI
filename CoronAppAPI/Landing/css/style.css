@@ -67,6 +67,11 @@ img {
 	max-width: 100%;
 }
 
+.logo-img {
+	width: 60px;
+	height: 60px;
+}
+
 input:focus,
 select:focus,
 button:focus,

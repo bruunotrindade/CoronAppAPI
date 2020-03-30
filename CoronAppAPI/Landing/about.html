@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+	<title>CovidApp - Brasil</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="SolMusic HTML Template">
+	<meta name="keywords" content="music, html">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<!-- Favicon -->
+	<link href="img/favicon.ico" rel="shortcut icon"/>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap" rel="stylesheet">
+ 
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="css/owl.carousel.min.css"/>
+	<link rel="stylesheet" href="css/slicknav.min.css"/>
+
+	<!-- Animations 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">-->
+
+	<!-- Main Stylesheets -->
+	<link rel="stylesheet" href="css/style.css"/>
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+
+		.logo-img {
+			width: 60px;
+			height: 60px;
+		}
+		
+		@keyframes float {
+			0% {
+				transform: translatey(0px);
+			}
+			50% {
+				transform: translatey(-20px);
+			}
+			100% {
+				transform: translatey(0px);
+			}
+		}
+
+		@keyframes floating {
+			0% {
+				-webkit-transform: translate3d(0,-4px,0);
+				transform: translate3d(0,-4px,0);
+			}
+
+			100% {
+				-webkit-transform: translate3d(0,4px,0);
+				transform: translate3d(0,4px,0)
+			}
+		}
+
+		.icon-animated{
+			transform: translatey(0px);
+			animation: floating 1.5s ease-in-out infinite;
+			animation-direction: alternate;
+		}
+
+		.site-logo
+		{
+			float: left;
+			display: flex;
+			align-items: center;
+		}
+
+		.logo-rodape{
+			float: none;
+		}
+
+		.icons {
+			display: none;
+		}
+
+		.icon-1, .icon-2 .icon-3 {
+			display: none !important;
+		}		
+
+		.icon-1 {
+			position: absolute;
+    		top: 55% !important;
+    		left: 5%;
+		}
+
+		.icon-2 {
+			position: absolute;
+			right: -1%;
+			top: 1% !important;
+		}
+
+		.icon-3 {
+			position: absolute;
+			top: 55% !important;
+			right: 5%;
+		}
+
+		.icons-container {
+			display: flex; 
+			justify-content: space-between; 
+			align-items: center; 
+			width: 100%;
+		}
+
+		.icon-end {
+			justify-content: flex-end;
+		}
+
+		.title {
+			margin-bottom: 15px;
+		}
+
+		@media only screen and (max-width: 991px) {
+			.site-logo
+			{
+				float: initial;
+			}
+			.content-flex {
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				max-width: none !important;
+			}
+			.icons {
+				display: block;
+			}
+
+			.icon-1, .icon-2 , .icon-3{
+				width: 100px !important;
+				display: initial !important;
+			}
+			
+			.container-mobile {
+			    align-items: flex-start;
+			}
+
+		}
+	</style>
+
+</head>
+<body>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+
+	<!-- Header section -->
+	<header class="header-section clearfix">
+		<a href="index.html" class="site-logo">
+			<img src="img/logo2.png" alt="" class='logo-img'>
+			<span style="color: #1e88e5 ; font-size: 24px; padding-left: 5px;">Covid<span style="color: white;">App</span></span>
+		</a>
+		
+		
+		
+		<ul class="main-menu">
+
+			<li><a href="index.html">Ínicio</a></li>
+			<li><a href="#">Sobre</a></li>
+			<li><a href="http://covidac.tk">Mapa Covid Acre</a></li>
+			<li><a href="#">Download</a></li>
+			<!--
+			<li><a href="#">Pages</a>
+				<ul class="sub-menu">
+					<li><a href="category.html">Category</a></li>
+					<li><a href="playlist.html">Playlist</a></li>
+					<li><a href="artist.html">Artist</a></li>
+					<li><a href="blog.html">Blog</a></li>
+					<li><a href="contact.html">Contact</a></li>
+				</ul>
+			</li>
+			-->
+
+		</ul>
+		
+	</header>
+	<!-- Header section end -->
+
+
+
+	<!-- Premium section end -->
+	<section class="premium-section spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="section-title">
+						<h2>Sobre nós</h2>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<p>
+						Este aplicativo foi desenvolvido por iniciativa de alunos e professores do Curso de 
+						Sistemas de Informação da Universidade Federal do Acre, em meio à pandemia da COVID-19.
+						O objetivo do aplicativo é auxiliar no combate à propagação da doença.
+						Criamos um sistema de recomendação que, baseado nos sintomas e dados do paciente, 
+						sugere medidas a serem adotadas. Além disso, o App permite o acompanhamento de evolução dos 
+						sintomas, o que pode auxiliar no diagnóstico médico.
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+				<a href='https://daricelio.github.io/' >
+					<div class="premium-item" style='cursor: pointer;'>
+						<h2 class='title'>Coordenação</h2>
+						<img src="img/daricelio.jpg" 
+										class="">
+						<h5>Professor Dr. Daricélio Moreira Soares</h5>
+
+					</div>
+					</a>
+				</div>
+			</div>
+
+			<div class='row' style='margin-top: 50px;'> 
+				<div class='col-12' style="text-align: center">
+					<h2 class='title'>Equipe</h2>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+				<a href='https://github.com/bruunotrindade' >
+					<div class="premium-item" style='cursor: pointer;'>
+						<img src="img/bruno.jpeg" 
+										class="">
+						<h5>Bruno Ricardo Silva Trindade</h5>
+					</div>
+					</a>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+				<a href='https://github.com/JhonatanPatrocinio' >
+					<div class="premium-item" style='cursor: pointer;'>
+						<img src="img/jhonatan.jpg" 
+										class="">
+						<h5>Jhonatan Santos do Patrocínio</h5>
+	
+					</div>
+					</a>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+					<a href='https://github.com/arkanttus'>
+					<div class="premium-item" style='cursor: pointer;'>
+						<img src="img/italo.jpeg" 
+										class="">
+						<h5>Ítalo Ney Moreira de Oliveira</h5>
+					</div>
+					</a>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+				<a href='https://github.com/Tony-Starkus'>
+					<div class="premium-item" style='cursor: pointer;'>
+						<img src="img/talisson.jpeg" 
+										class="">
+						<h5>Thalisson Bandeira Araújo</h5>
+				
+					</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Premium section end -->
+
+	<!-- Footer section -->
+	<footer class="footer-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-6 col-lg-7 order-lg-2">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="footer-widget">
+								<h2>Sobre nós</h2>
+								<ul>
+									<li><a href="about.html">História</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="footer-widget">
+								<h2>Produtos</h2>
+								<ul>
+									<li><a href="">CovidApp</a></li>
+									<li><a href="">Mapa COVID19 Acre</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="footer-widget">
+								<h2>Download</h2>
+								<ul>
+									<li><a href="">CovidApp Android</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="footer-widget">
+								<h2>Siga-nos</h2>
+								<ul>
+									<li><a href="https://www.instagram.com/covidappbr/"><i class="fa fa-instagram"></i> @covidappbr</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-5 order-lg-1">
+					<a href="index.html" class="logo-rodape">
+						<img src="img/logo2.png" alt="" class='logo-img'>
+						<span style="color: #1e88e5 ; font-size: 24px; padding-left: 5px;">Covid<span style="color: white;">App</span></span>
+					</a>
+					<div class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+CovidApp &copy;<script>document.write(new Date().getFullYear());</script> Todos os direitos reservados | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
+
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer section end -->
+	
+	<!--====== Javascripts & Jquery ======-->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.slicknav.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/mixitup.min.js"></script>
+	<script src="js/main.js"></script>
+
+	</body>
+</html>

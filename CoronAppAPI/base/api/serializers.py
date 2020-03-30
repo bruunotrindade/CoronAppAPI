@@ -89,15 +89,14 @@ class AppUserSerializer(serializers.ModelSerializer):
     setDiseases = serializers.PrimaryKeyRelatedField(
         source='diseases', many=True, write_only=True, queryset=Disease.objects.all(), required=True
     )
-    setSymptoms = serializers.PrimaryKeyRelatedField(
-        source='symptoms', many=True, write_only=True, queryset=Symptom.objects.all(), required=True
-    )
+    #setSymptoms = serializers.PrimaryKeyRelatedField(
+    #    source='symptoms', many=True, write_only=True, queryset=Symptom.objects.all(), required=True
+    #)
 
     class Meta:
         model = AppUser
         fields = (
-            'id', 'email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms', 'setChars', 'setDiseases',
-            'setSymptoms'
+            'id', 'email', 'dob', 'state', 'city', 'chars', 'diseases', 'symptoms', 'setChars', 'setDiseases'
         )
 
 

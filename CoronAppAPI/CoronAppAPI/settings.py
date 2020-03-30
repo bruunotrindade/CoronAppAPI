@@ -25,6 +25,8 @@ SECRET_KEY = 'us8a#n^1a@xjyv-&v8@m%k2_s0mnu#nf4ih&r!uoecb)_2uee8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+PRODUCTION = False
+
 ALLOWED_HOSTS = ['*']
 
 
@@ -81,7 +83,7 @@ DATABASES = {
         'NAME': 'coronapp', 
         'USER': 'admin',
         'PASSWORD': 'password',
-        'HOST': '127.0.0.1', 
+        'HOST': '127.0.0.1' if not PRODUCTION else '33.223.68.68', 
         'PORT': '3306',
     }
 }
@@ -123,11 +125,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/' if not PRODUCTION else '/static/back/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-] 
+if PRODUCTION:
+    STATIC_ROOT = '/opt/CoronAppAPI/CoronAppAPI/static/'
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ] 
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
