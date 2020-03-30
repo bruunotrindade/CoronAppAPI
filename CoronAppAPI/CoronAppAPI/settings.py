@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'coronapp', 
         'USER': 'admin',
         'PASSWORD': 'password',
-        'HOST': '127.0.0.1' if not PRODUCTION else '33.223.68.68', 
+        'HOST': '127.0.0.1' if not PRODUCTION else '35.223.68.68', 
         'PORT': '3306',
     }
 }
